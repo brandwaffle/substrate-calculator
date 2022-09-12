@@ -199,7 +199,7 @@ class Calculator extends React.Component {
     this.setState({sawdust_weight: 100 - newValue.values[0]});
   }
 
-  viewState = () => {
+  calculateState = () => {
     var water_weight, dry_weight, supplement_weight, sawdust_weight;
     water_weight = (this.state.water_weight / 100) * this.state.batch_info.batch_size;
     console.log( 'water weight: ' + water_weight );
@@ -213,10 +213,10 @@ class Calculator extends React.Component {
     console.log( 'sawdust weight: ' + sawdust_weight);
     this.setState({calculated_weights: 
       {
-        water_weight: water_weight,
-        dry_weight: dry_weight,
-        supplement_weight: supplement_weight,
-        sawdust_weight: sawdust_weight
+        water_weight: water_weight.toFixed(0),
+        dry_weight: dry_weight.toFixed(0),
+        supplement_weight: supplement_weight.toFixed(0),
+        sawdust_weight: sawdust_weight.toFixed(0)
       }
     })
     console.log(this.state);
@@ -238,7 +238,7 @@ class Calculator extends React.Component {
         <div className='batch-info'>
           <Batch calculateBatchInfo={this.calculateBatchInfo} />
         </div>
-        <button onClick={ this.viewState }>View state</button>
+        <button onClick={ this.calculateState }>Calculate</button>
         <div className='results'>
           <output className="sawdust-weight">
             Base substrate (e.g. sawdust): {this.state.sawdust_weight} %
