@@ -7,6 +7,17 @@ class Water extends React.Component {
   state = {
     values: [50]
   }
+
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+  
+  handleChange(values) {
+    this.setState(values);
+    this.props.calculateWaterInfo(values);
+  }
+
   render() {
     return (
       <div className='water'>
@@ -15,7 +26,7 @@ class Water extends React.Component {
         min={0}
         max={100}
         values={this.state.values}
-        onChange={(values) => this.setState({ values })}
+        onChange={(values) => this.handleChange({ values })}
         renderTrack={({ props, children }) => (
           <div
             {...props}
@@ -63,9 +74,9 @@ class Batch extends React.Component {
   
   handleChange(event) {
     if ( event.target.className == 'number-of-bags' ) {
-      this.setState({number_of_bags: event.target.value, batch_size: event.target.value * this.state.bag_size});
+      this.setState((state) => { return {number_of_bags: event.target.value, batch_size: event.target.value * state.bag_size}});
     } else {
-      this.setState({bag_size: event.target.value, batch_size: event.target.value * this.state.number_of_bags});
+      this.setState((state) => { return {bag_size: event.target.value, batch_size: event.target.value * this.state.number_of_bags}});
     }
   }
   render() {
@@ -143,7 +154,8 @@ class Calculator extends React.Component {
     this.state = {
       sawdust_weight: null,
       supplement_weight: null,
-      water_weight: null
+      water_weight: null,
+      batch_info: null
     }
     this.calculateBatchInfo = this.calculateBatchInfo.bind(this);
   }
@@ -152,8 +164,14 @@ class Calculator extends React.Component {
     return <Supplement value={value} percentage={percentage} />
   }
 
-  calculateBatchInfo = (values) => {
-    console.log(values);
+  calculateBatchInfo = (prevState, values) => {
+    this.setState({batch_info: prevState});
+    console.log(this.state);
+  }
+
+  calculateWaterInfo = (newValue) => {
+    console.log(newValue.values[0]);
+    this.setState({water_weight: newValue.values[0]});
   }
 
   render() {
@@ -167,7 +185,7 @@ class Calculator extends React.Component {
         </div>
         <h2>Wet Ingredients</h2>
         <div className="header">Enter water as a percentage of total batch weight:</div>
-        <div className="water"><Water /></div>
+        <div className="water"><Water calculateWaterInfo={this.calculateWaterInfo} /></div>
         <h2>Batch info</h2>
         <div className='batch-info'>
           <Batch calculateBatchInfo={this.calculateBatchInfo} />
