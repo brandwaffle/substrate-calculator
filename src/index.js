@@ -73,11 +73,15 @@ class Batch extends React.Component {
   }
   
   handleChange(event) {
+    var calculated_values = null;
     if ( event.target.className == 'number-of-bags' ) {
-      this.setState((state) => { return {number_of_bags: event.target.value, batch_size: event.target.value * state.bag_size}});
+      calculated_values = {number_of_bags: event.target.value, batch_size: event.target.value * this.state.bag_size, bag_size: this.state.bag_size};
+      this.setState({calculated_values});
     } else {
-      this.setState((state) => { return {bag_size: event.target.value, batch_size: event.target.value * this.state.number_of_bags}});
+      calculated_values = {bag_size: event.target.value, batch_size: event.target.value * this.state.number_of_bags, number_of_bags: this.state.number_of_bags};
+      this.setState({calculated_values});
     }
+    this.props.calculateBatchInfo(calculated_values);
   }
   render() {
     return (
@@ -90,9 +94,6 @@ class Batch extends React.Component {
           <output>
             {this.state.batch_size}
           </output>
-          <button className='calculate' onClick= {() => this.props.calculateBatchInfo(this.state)}>
-          Calculate Results
-        </button>
         </div>
     );
   }
@@ -103,6 +104,16 @@ class Supplement extends React.Component {
     values: [50]
   };
   
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(values) {
+    this.setState(values);
+    this.props.calculateSupplementInfo(values);
+  }
+
   render() {
     return (
       <div className="supplement">
@@ -112,7 +123,7 @@ class Supplement extends React.Component {
         min={0}
         max={100}
         values={this.state.values}
-        onChange={(values) => this.setState({ values })}
+        onChange={(values) => this.handleChange({ values })}
         renderTrack={({ props, children }) => (
           <div
             {...props}
@@ -153,30 +164,54 @@ class Calculator extends React.Component {
     
     this.state = {
       sawdust_weight: null,
-      supplement_weight: null,
+      supplement_weights: Array(),
       water_weight: null,
       batch_info: null
     }
     this.calculateBatchInfo = this.calculateBatchInfo.bind(this);
+    this.calculateSupplementInfo = this.calculateSupplementInfo.bind(this);
   }
   
   renderSupplement(value, percentage) {
-    return <Supplement value={value} percentage={percentage} />
+    return <Supplement 
+              value={value} 
+              percentage={percentage}
+              calculateSupplementInfo={this.calculateSupplementInfo}
+    />
   }
 
-  calculateBatchInfo = (prevState, values) => {
-    this.setState({batch_info: prevState});
-    console.log(this.state);
+  calculateBatchInfo = (newValue) => {
+    this.setState({batch_info: newValue});
+    console.log(newValue);
   }
 
   calculateWaterInfo = (newValue) => {
-    console.log(newValue.values[0]);
     this.setState({water_weight: newValue.values[0]});
+  }
+
+  calculateSupplementInfo = (newValue) => {
+    this.setState({supplement_weights: newValue.values[0]});
+    this.setState({sawdust_weight: 100 - newValue.values[0]});
+  }
+
+  viewState = () => {
+    var water_weight, dry_weight, supplement_weight, sawdust_weight;
+    water_weight = (this.state.water_weight / 100) * this.state.batch_info.batch_size;
+    console.log( 'water weight: ' + water_weight );
+    dry_weight = this.state.batch_info.batch_size - water_weight;
+    console.log( 'dry weight: ' + dry_weight );
+    
+    supplement_weight = dry_weight * ( this.state.supplement_weights / 100 );
+    console.log( 'supplement weight: ' + supplement_weight);
+
+    sawdust_weight = dry_weight - supplement_weight;
+    console.log( 'sawdust weight: ' + sawdust_weight);
+    //console.log(this.state);
   }
 
   render() {
     return (
-      <div className="calculator" onChange={this.calculateBatchInfo}>
+      <div className="calculator">
         <h1>Mushroom Substrate Calculator</h1>
         <h2>Dry Ingredients</h2>
         <div className="header">Add supplements (e.g. wheat bran) below:</div>
@@ -190,8 +225,11 @@ class Calculator extends React.Component {
         <div className='batch-info'>
           <Batch calculateBatchInfo={this.calculateBatchInfo} />
         </div>
+        <button onClick={ this.viewState }>View state</button>
         <div className='results'>
-
+          <output className="sawdust-weight">
+            Base substrate (e.g. sawdust): {this.state.sawdust_weight} %
+          </output>
         </div>
       </div>
     );
