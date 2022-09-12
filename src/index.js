@@ -163,10 +163,15 @@ class Calculator extends React.Component {
     super(props);
     
     this.state = {
-      sawdust_weight: null,
-      supplement_weights: Array(),
-      water_weight: null,
-      batch_info: null
+      sawdust_weight: 50,
+      supplement_weights: 50,
+      water_weight: 50,
+      batch_info: {
+        number_of_bags: 1,
+        bag_size: 5,
+        batch_size: 5
+      },
+      calculated_weights: Object()
     }
     this.calculateBatchInfo = this.calculateBatchInfo.bind(this);
     this.calculateSupplementInfo = this.calculateSupplementInfo.bind(this);
@@ -206,7 +211,15 @@ class Calculator extends React.Component {
 
     sawdust_weight = dry_weight - supplement_weight;
     console.log( 'sawdust weight: ' + sawdust_weight);
-    //console.log(this.state);
+    this.setState({calculated_weights: 
+      {
+        water_weight: water_weight,
+        dry_weight: dry_weight,
+        supplement_weight: supplement_weight,
+        sawdust_weight: sawdust_weight
+      }
+    })
+    console.log(this.state);
   }
 
   render() {
@@ -229,6 +242,18 @@ class Calculator extends React.Component {
         <div className='results'>
           <output className="sawdust-weight">
             Base substrate (e.g. sawdust): {this.state.sawdust_weight} %
+          </output>
+          <h2>Water Weight</h2>
+          <output>
+           {this.state.calculated_weights.water_weight} lbs
+          </output>
+          <h2>Sawdust Weight</h2>
+          <output>
+           {this.state.calculated_weights.sawdust_weight} lbs
+          </output>
+          <h2>Supplement Weight</h2>
+          <output>
+           {this.state.calculated_weights.supplement_weight} lbs
           </output>
         </div>
       </div>
