@@ -40,9 +40,9 @@ export default function InputSlider({parentCallback}) {
   };
 
   return (
-    <Box sx={{ width: 250 }}>
+    <Box sx={{ width: 360 }}>
       <Typography id="input-slider" gutterBottom>
-        Volume
+      Enter water as a percentage of total batch weight:
       </Typography>
       <Grid container spacing={2} alignItems="center">
         <Grid item>
@@ -271,7 +271,6 @@ class Calculator extends React.Component {
           </output>
         </div>
         <h2>Wet Ingredients</h2>
-        <div className="header">Enter water as a percentage of total batch weight:</div>
         <div className="water"><Water calculateWaterInfo={this.calculateWaterInfo} /></div>
         <h2>Batch info</h2>
         <div className='batch-info'>
