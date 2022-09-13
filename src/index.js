@@ -14,6 +14,11 @@ import MuiInput from '@mui/material/Input';
 import ScaleIcon from '@mui/icons-material/Scale';
 import OpacityIcon from '@mui/icons-material/Opacity';
 
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
 
 const Input = styled(MuiInput)`
   width: 42px;
@@ -41,7 +46,7 @@ export default function InputSlider({parentCallback}) {
 
   return (
     <Box sx={{ width: 360 }}>
-      <Typography id="input-slider" gutterBottom>
+      <Typography variant="subtitle2" id="input-slider" gutterBottom>
       Enter water as a percentage of total batch weight:
       </Typography>
       <Grid container spacing={2} alignItems="center">
