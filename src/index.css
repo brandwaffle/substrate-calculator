@@ -58,6 +58,22 @@ ol, ul {
   }
 }
 
+.calculator {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: lavender;
+  border-radius: 20px;
+  padding: 3em;
+}
+
 .input-range {
   margin-bottom: 160px;
+}
+button {
+  background-color: indigo;
+  color: white;
+}
+
+h1 {
+  text-align: center;
 }

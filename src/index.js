@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {Range} from 'react-range';
 import './index.css';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 class Water extends React.Component {
   state = {
@@ -22,7 +24,7 @@ class Water extends React.Component {
     return (
       <div className='water'>
         <Range
-        step={1}
+        step={5}
         min={0}
         max={100}
         values={this.state.values}
@@ -33,7 +35,7 @@ class Water extends React.Component {
             style={{
               ...props.style,
               height: '6px',
-              width: '120px',
+              width: '300px',
               float: 'right',
               backgroundColor: '#ccc'
             }}
@@ -86,10 +88,8 @@ class Batch extends React.Component {
   render() {
     return (
         <div className='batch'>
-          <label className='number-of-bags'>Number of Bags</label>
-          <input type='number' className='number-of-bags' defaultValue={this.state.number_of_bags} onChange={this.handleChange} />
-          <label className='bag-size'>Bag Size (lbs)</label>
-          <input type='number' className='bag-size' defaultValue={this.state.bag_size} onChange={this.handleChange} />
+          <TextField label="Number of Bags" variant="outlined" type='number' className='number-of-bags' defaultValue={this.state.number_of_bags} onChange={this.handleChange} />
+          <TextField label="Bag Size (lbs)" variant="outlined" type='number' className='bag-size' defaultValue={this.state.bag_size} onChange={this.handleChange} />
           <label className='total-batch-size'>Total Batch Size (lbs): </label>
           <output>
             {this.state.batch_size}
@@ -119,7 +119,7 @@ class Supplement extends React.Component {
       <div className="supplement">
         <input className="supplement" defaultValue={this.props.value} />
         <Range
-        step={1}
+        step={5}
         min={0}
         max={100}
         values={this.state.values}
@@ -130,7 +130,7 @@ class Supplement extends React.Component {
             style={{
               ...props.style,
               height: '6px',
-              width: '120px',
+              width: '300px',
               float: 'right',
               backgroundColor: '#ccc'
             }}
@@ -231,6 +231,11 @@ class Calculator extends React.Component {
         <div className="supplements">
           {this.renderSupplement("wheat bran", "25")}
         </div>
+        <div>
+        <output className="sawdust-weight">
+            Base substrate (e.g. sawdust): {this.state.sawdust_weight} %
+          </output>
+        </div>
         <h2>Wet Ingredients</h2>
         <div className="header">Enter water as a percentage of total batch weight:</div>
         <div className="water"><Water calculateWaterInfo={this.calculateWaterInfo} /></div>
@@ -238,10 +243,11 @@ class Calculator extends React.Component {
         <div className='batch-info'>
           <Batch calculateBatchInfo={this.calculateBatchInfo} />
         </div>
-        <button onClick={ this.calculateState }>Calculate</button>
+        <Button variant="contained" onClick={ this.calculateState }>Calculate</Button>
         <div className='results'>
-          <output className="sawdust-weight">
-            Base substrate (e.g. sawdust): {this.state.sawdust_weight} %
+          <h2>Total Weight</h2>
+          <output>
+           {this.state.batch_info.batch_size} lbs
           </output>
           <h2>Water Weight</h2>
           <output>
