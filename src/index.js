@@ -5,12 +5,77 @@ import './index.css';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Slider from '@mui/material/Slider';
+import MuiInput from '@mui/material/Input';
 import ScaleIcon from '@mui/icons-material/Scale';
+import OpacityIcon from '@mui/icons-material/Opacity';
+
+
+const Input = styled(MuiInput)`
+  width: 42px;
+`;
+
+export default function InputSlider({parentCallback}) {
+  const [value, setValue] = React.useState(30);
+
+  const handleSliderChange = (event, newValue) => {
+    setValue(newValue);
+    parentCallback(newValue);
+  };
+
+  const handleInputChange = (event) => {
+    setValue(event.target.value === '' ? '' : Number(event.target.value));
+  };
+
+  const handleBlur = () => {
+    if (value < 0) {
+      setValue(0);
+    } else if (value > 100) {
+      setValue(100);
+    }
+  };
+
+  return (
+    <Box sx={{ width: 250 }}>
+      <Typography id="input-slider" gutterBottom>
+        Volume
+      </Typography>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item>
+          <OpacityIcon />
+        </Grid>
+        <Grid item xs>
+          <Slider
+            value={typeof value === 'number' ? value : 0}
+            onChange={handleSliderChange}
+            aria-labelledby="input-slider"
+          />
+        </Grid>
+        <Grid item>
+          <Input
+            value={value}
+            size="small"
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            inputProps={{
+              step: 10,
+              min: 0,
+              max: 100,
+              type: 'number',
+              'aria-labelledby': 'input-slider',
+            }}
+          />
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
 
 class Water extends React.Component {
-  state = {
-    values: [50]
-  }
 
   constructor(props) {
     super(props);
@@ -18,48 +83,15 @@ class Water extends React.Component {
   }
   
   handleChange(values) {
-    this.setState(values);
+    //this.setState(values);
+    //console.log(values);
     this.props.calculateWaterInfo(values);
   }
 
   render() {
     return (
       <div className='water'>
-        <Range
-        step={5}
-        min={0}
-        max={100}
-        values={this.state.values}
-        onChange={(values) => this.handleChange({ values })}
-        renderTrack={({ props, children }) => (
-          <div
-            {...props}
-            style={{
-              ...props.style,
-              height: '6px',
-              width: '300px',
-              float: 'right',
-              backgroundColor: '#ccc'
-            }}
-          >
-            {children}
-          </div>
-        )}
-        renderThumb={({ props }) => (
-          <div
-            {...props}
-            style={{
-              ...props.style,
-              height: '42px',
-              width: '8px',
-              backgroundColor: '#999'
-            }}
-          />
-        )}
-      />
-      <output style={{ marginTop: "30px" }} id="output">
-          {this.state.values[0]}%
-        </output>
+        <InputSlider parentCallback={this.handleChange}/>
       </div>
     );
   }
@@ -193,7 +225,7 @@ class Calculator extends React.Component {
   }
 
   calculateWaterInfo = (newValue) => {
-    this.setState({water_weight: newValue.values[0]});
+    this.setState({water_weight: newValue});
   }
 
   calculateSupplementInfo = (newValue) => {
