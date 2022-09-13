@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom/client';
 import {Range} from 'react-range';
 import './index.css';
 import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
+import ScaleIcon from '@mui/icons-material/Scale';
 
 class Water extends React.Component {
   state = {
@@ -90,10 +92,10 @@ class Batch extends React.Component {
         <div className='batch'>
           <TextField label="Number of Bags" variant="outlined" type='number' className='number-of-bags' defaultValue={this.state.number_of_bags} onChange={this.handleChange} />
           <TextField label="Bag Size (lbs)" variant="outlined" type='number' className='bag-size' defaultValue={this.state.bag_size} onChange={this.handleChange} />
-          <label className='total-batch-size'>Total Batch Size (lbs): </label>
-          <output>
-            {this.state.batch_size}
-          </output>
+          <ScaleIcon fontSize="large" style={{
+              height: '50px'
+            }} />
+          <Chip label={this.state.batch_size} variant="outlined" />            
         </div>
     );
   }
@@ -117,7 +119,7 @@ class Supplement extends React.Component {
   render() {
     return (
       <div className="supplement">
-        <input className="supplement" defaultValue={this.props.value} />
+        <TextField variant="outlined" className="supplement" defaultValue={this.props.value} />
         <Range
         step={5}
         min={0}
@@ -246,21 +248,13 @@ class Calculator extends React.Component {
         <Button variant="contained" onClick={ this.calculateState }>Calculate</Button>
         <div className='results'>
           <h2>Total Weight</h2>
-          <output>
-           {this.state.batch_info.batch_size} lbs
-          </output>
+          <Chip label={this.state.batch_info.batch_size + " lbs"} variant="filled" />
           <h2>Water Weight</h2>
-          <output>
-           {this.state.calculated_weights.water_weight} lbs
-          </output>
+          <Chip label={this.state.water_weight + " lbs"} variant="filled" />
           <h2>Sawdust Weight</h2>
-          <output>
-           {this.state.calculated_weights.sawdust_weight} lbs
-          </output>
+          <Chip label={this.state.sawdust_weight + " lbs"} variant="filled" />
           <h2>Supplement Weight</h2>
-          <output>
-           {this.state.calculated_weights.supplement_weight} lbs
-          </output>
+          <Chip label={this.state.supplement_weights + " lbs"} variant="filled" />
         </div>
       </div>
     );
