@@ -4,9 +4,11 @@ import {Range} from 'react-range';
 import './index.css';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
+import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
@@ -25,6 +27,8 @@ import '@fontsource/roboto/700.css';
 const Input = styled(MuiInput)`
   width: 42px;
 `;
+
+const p1 = {padding: 10, margin: 5, width: 300, height: 150, backgroundColor: '#9933CC' }
 
 export default function InputSlider({parentCallback, iconType}) {
   const [value, setValue] = React.useState(50);
@@ -168,8 +172,8 @@ class Calculator extends React.Component {
       calculated_weights: {
         water_weight: 25,
         dry_weight: 25,
-        supplement_weight: 12.5,
-        sawdust_weight: 12.5
+        supplement_weight: 12,
+        sawdust_weight: 13
       }
     }
     this.calculateBatchInfo = this.calculateBatchInfo.bind(this);
@@ -222,10 +226,10 @@ class Calculator extends React.Component {
     console.log( 'sawdust weight: ' + sawdust_weight);
     this.setState({calculated_weights: 
       {
-        water_weight: water_weight.toFixed(1),
-        dry_weight: dry_weight.toFixed(1),
-        supplement_weight: supplement_weight.toFixed(1),
-        sawdust_weight: sawdust_weight.toFixed(1)
+        water_weight: water_weight.toFixed(0),
+        dry_weight: dry_weight.toFixed(0),
+        supplement_weight: supplement_weight.toFixed(0),
+        sawdust_weight: sawdust_weight.toFixed(0)
       }
     })
     console.log(this.state);
@@ -233,41 +237,71 @@ class Calculator extends React.Component {
 
   render() {
     return (
-      <div className="calculator">
+      <Container maxWidth={640} className="calculator">
         <h1>Mushroom Substrate Calculator</h1>
-        <h2>Dry Ingredients</h2>
-        <div className="supplements">
-          {this.renderSupplement("wheat bran", "25")}
-        </div>
-        <div>
-        <Grid container spacing={2} alignItems="center">
+
+        <Grid container spacing={2} alignItems="top" >
           <Grid item>
-            <ForestIcon />
+            <h2>Dry Ingredients</h2>
+            <div className="supplements">
+              {this.renderSupplement("wheat bran", "25")}
+            </div>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item>
+                <ForestIcon />
+              </Grid>
+              <Grid item>
+                <Typography variant="subtitle2" id="base-substrate" gutterBottom>
+                  Base substrate (e.g. sawdust): {this.state.sawdust_weight} %
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item>
-            <Typography variant="subtitle2" id="base-substrate" gutterBottom>
-              Base substrate (e.g. sawdust): {this.state.sawdust_weight} %
-            </Typography>
+            <h2>Wet Ingredients</h2>
+            <div className="water"><Water calculateWaterInfo={this.calculateWaterInfo} /></div>
+          </Grid>
+          <Grid item>
+            <h2>Batch info</h2>
+            <div className='batch-info'>
+              <Batch calculateBatchInfo={this.calculateBatchInfo} />
+            </div>
           </Grid>
         </Grid>
-        </div>
-        <h2>Wet Ingredients</h2>
-        <div className="water"><Water calculateWaterInfo={this.calculateWaterInfo} /></div>
-        <h2>Batch info</h2>
-        <div className='batch-info'>
-          <Batch calculateBatchInfo={this.calculateBatchInfo} />
-        </div>
+
         <div className='results'>
-          <h2>Total Weight</h2>
-          <Chip label={this.state.batch_info.batch_size + " lbs"} variant="filled" />
-          <h2>Water Weight</h2>
-          <Chip label={this.state.calculated_weights.water_weight + " lbs"} variant="filled" />
-          <h2>Sawdust Weight</h2>
-          <Chip label={this.state.calculated_weights.sawdust_weight + " lbs"} variant="filled" />
-          <h2>Supplement Weight</h2>
-          <Chip label={this.state.calculated_weights.supplement_weight + " lbs"} variant="filled" />
+          <Grid container spacing={2} alignItems="center">
+            <Grid item>
+              <Paper style={p1} elevation={3}>
+                <Typography variant="h6" component="h4" style={{ color: 'white' }}>
+                  Total Weight
+                </Typography>
+                <Typography variant={"h" + (this.state.batch_info.batch_size.toString().length > 3 ? "2" : "1")} component={"h" + (this.state.batch_info.batch_size.toString().length > 3 ? "2" : "1")} style={{ color: 'white' }}>{this.state.batch_info.batch_size + " lbs"}</Typography>
+              </Paper>
+              <Paper style={p1} elevation={3}>
+                <Typography variant="h6" component="h4" style={{ color: 'white' }}>
+                  Water Weight
+                </Typography>
+                <Typography variant={"h" + (this.state.calculated_weights.water_weight.toString().length > 3 ? "2" : "1")} component={"h" + (this.state.calculated_weights.water_weight.toString().length > 3 ? "2" : "1")} style={{ color: 'white' }}>{this.state.calculated_weights.water_weight + " lbs"}</Typography>
+              </Paper>
+            </Grid>
+            <Grid item>
+              <Paper style={p1} elevation={3}>
+                <Typography variant="h6" component="h4" style={{ color: 'white' }}>
+                  Sawdust Weight
+                </Typography>
+                <Typography variant={"h" + (this.state.calculated_weights.sawdust_weight.toString().length > 3 ? "2" : "1")} component={"h" + (this.state.calculated_weights.sawdust_weight.toString().length > 3 ? "2" : "1")} style={{ color: 'white' }}>{this.state.calculated_weights.sawdust_weight + " lbs"}</Typography>
+              </Paper>
+              <Paper style={p1} elevation={3}>
+                <Typography variant="h6" component="h4" style={{ color: 'white' }}>
+                  Supplement Weight
+                </Typography>
+                <Typography variant={"h" + (this.state.calculated_weights.supplement_weight.toString().length > 3 ? "2" : "1")} component={"h" + (this.state.calculated_weights.supplement_weight.toString().length > 3 ? "2" : "1")} style={{ color: 'white' }}>{this.state.calculated_weights.supplement_weight + " lbs"}</Typography>
+              </Paper>
+            </Grid>
+          </Grid>
         </div>
-      </div>
+      </Container>
     );
   }
 }
