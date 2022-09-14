@@ -25,7 +25,7 @@ const Input = styled(MuiInput)`
 `;
 
 export default function InputSlider({parentCallback}) {
-  const [value, setValue] = React.useState(30);
+  const [value, setValue] = React.useState(50);
 
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
@@ -113,26 +113,26 @@ class Batch extends React.Component {
     };
   }
   
-  handleChange(event) {
-    var calculated_values = null;
-    if ( event.target.className == 'number-of-bags' ) {
+  handleChange(field, event) {
+    /*var calculated_values = null;
+
+    if ( field == 'number-of-bags' ) {
       calculated_values = {number_of_bags: event.target.value, batch_size: event.target.value * this.state.bag_size, bag_size: this.state.bag_size};
-      this.setState({calculated_values});
     } else {
       calculated_values = {bag_size: event.target.value, batch_size: event.target.value * this.state.number_of_bags, number_of_bags: this.state.number_of_bags};
-      this.setState({calculated_values});
     }
-    this.props.calculateBatchInfo(calculated_values);
+    this.setState({calculated_values});
+*/
+    this.props.calculateBatchInfo(field, event);
   }
   render() {
     return (
         <div className='batch'>
-          <TextField label="Number of Bags" variant="outlined" type='number' className='number-of-bags' defaultValue={this.state.number_of_bags} onChange={this.handleChange} />
-          <TextField label="Bag Size (lbs)" variant="outlined" type='number' className='bag-size' defaultValue={this.state.bag_size} onChange={this.handleChange} />
+          <TextField label="Number of Bags" variant="outlined" type='number' className='number-of-bags' defaultValue={this.state.number_of_bags} onChange={(e) => this.handleChange("number-of-bags", e)} />
+          <TextField label="Bag Size (lbs)" variant="outlined" type='number' className='bag-size' defaultValue={this.state.bag_size} onChange={(e) => this.handleChange("bag-size", e)} />
           <ScaleIcon fontSize="large" style={{
               height: '50px'
             }} />
-          <Chip label={this.state.batch_size} variant="outlined" />            
         </div>
     );
   }
@@ -224,25 +224,34 @@ class Calculator extends React.Component {
     />
   }
 
-  calculateBatchInfo = (newValue) => {
-    this.setState({batch_info: newValue});
-    console.log(newValue);
+  calculateBatchInfo = (field, event) => {
+    var calculated_values = null;
+
+    if ( field == 'number-of-bags' ) {
+      calculated_values = {number_of_bags: event.target.value, batch_size: event.target.value * this.state.batch_info.bag_size, bag_size: this.state.batch_info.bag_size};
+    } else {
+      calculated_values = {bag_size: event.target.value, batch_size: event.target.value * this.state.batch_info.number_of_bags, number_of_bags: this.state.batch_info.number_of_bags};
+    }
+console.log(calculated_values);
+    this.setState({batch_info: calculated_values});
+    this.calculateState(calculated_values);
   }
 
   calculateWaterInfo = (newValue) => {
     this.setState({water_weight: newValue});
-  }
+    this.calculateState();
+ }
 
   calculateSupplementInfo = (newValue) => {
     this.setState({supplement_weights: newValue.values[0]});
     this.setState({sawdust_weight: 100 - newValue.values[0]});
   }
 
-  calculateState = () => {
+  calculateState = (batch_info = this.state.batch_info ) => {
     var water_weight, dry_weight, supplement_weight, sawdust_weight;
-    water_weight = (this.state.water_weight / 100) * this.state.batch_info.batch_size;
+    water_weight = (this.state.water_weight / 100) * batch_info.batch_size;
     console.log( 'water weight: ' + water_weight );
-    dry_weight = this.state.batch_info.batch_size - water_weight;
+    dry_weight = batch_info.batch_size - water_weight;
     console.log( 'dry weight: ' + dry_weight );
     
     supplement_weight = dry_weight * ( this.state.supplement_weights / 100 );
@@ -281,16 +290,15 @@ class Calculator extends React.Component {
         <div className='batch-info'>
           <Batch calculateBatchInfo={this.calculateBatchInfo} />
         </div>
-        <Button variant="contained" onClick={ this.calculateState }>Calculate</Button>
         <div className='results'>
           <h2>Total Weight</h2>
           <Chip label={this.state.batch_info.batch_size + " lbs"} variant="filled" />
           <h2>Water Weight</h2>
-          <Chip label={this.state.water_weight + " lbs"} variant="filled" />
+          <Chip label={this.state.calculated_weights.water_weight + " lbs"} variant="filled" />
           <h2>Sawdust Weight</h2>
-          <Chip label={this.state.sawdust_weight + " lbs"} variant="filled" />
+          <Chip label={this.state.calculated_weights.sawdust_weight + " lbs"} variant="filled" />
           <h2>Supplement Weight</h2>
-          <Chip label={this.state.supplement_weights + " lbs"} variant="filled" />
+          <Chip label={this.state.calculated_weights.supplement_weight + " lbs"} variant="filled" />
         </div>
       </div>
     );
