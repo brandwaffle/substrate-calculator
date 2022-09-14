@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
+import Divider from '@mui/material/Divider';
 import MuiInput from '@mui/material/Input';
 import ScaleIcon from '@mui/icons-material/Scale';
 import OpacityIcon from '@mui/icons-material/Opacity';
@@ -238,10 +239,10 @@ class Calculator extends React.Component {
   render() {
     return (
       <Container maxWidth={640} className="calculator">
-        <h1>Mushroom Substrate Calculator</h1>
+        <Typography variant="h2" component="h2">Mushroom Batch Calculator</Typography>
 
         <Grid container spacing={2} alignItems="top" >
-          <Grid item>
+          <Grid item style={{ backgroundColor: 'lightblue'}} >
             <h2>Dry Ingredients</h2>
             <div className="supplements">
               {this.renderSupplement("wheat bran", "25")}
@@ -257,11 +258,13 @@ class Calculator extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item>
+          <Grid item style={{ backgroundColor: 'beige'}} >
             <h2>Wet Ingredients</h2>
             <div className="water"><Water calculateWaterInfo={this.calculateWaterInfo} /></div>
           </Grid>
-          <Grid item>
+        </Grid>
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item style={{ backgroundColor: 'green'}} >
             <h2>Batch info</h2>
             <div className='batch-info'>
               <Batch calculateBatchInfo={this.calculateBatchInfo} />
@@ -269,8 +272,10 @@ class Calculator extends React.Component {
           </Grid>
         </Grid>
 
+        <Divider><Typography variant="h2" component="h2">Results</Typography></Divider>
+        
         <div className='results'>
-          <Grid container spacing={2} alignItems="center">
+          <Grid container spacing={2} justifyContent="center" alignItems="center">
             <Grid item>
               <Paper style={p1} elevation={3}>
                 <Typography variant="h6" component="h4" style={{ color: 'white' }}>
