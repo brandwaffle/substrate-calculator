@@ -88,8 +88,6 @@ class Water extends React.Component {
   }
   
   handleChange(values) {
-    //this.setState(values);
-    //console.log(values);
     this.props.calculateWaterInfo(values);
   }
 
@@ -114,22 +112,14 @@ class Batch extends React.Component {
   }
   
   handleChange(field, event) {
-    /*var calculated_values = null;
-
-    if ( field == 'number-of-bags' ) {
-      calculated_values = {number_of_bags: event.target.value, batch_size: event.target.value * this.state.bag_size, bag_size: this.state.bag_size};
-    } else {
-      calculated_values = {bag_size: event.target.value, batch_size: event.target.value * this.state.number_of_bags, number_of_bags: this.state.number_of_bags};
-    }
-    this.setState({calculated_values});
-*/
     this.props.calculateBatchInfo(field, event);
   }
+
   render() {
     return (
         <div className='batch'>
-          <TextField label="Number of Bags" variant="outlined" type='number' className='number-of-bags' defaultValue={this.state.number_of_bags} onChange={(e) => this.handleChange("number-of-bags", e)} />
-          <TextField label="Bag Size (lbs)" variant="outlined" type='number' className='bag-size' defaultValue={this.state.bag_size} onChange={(e) => this.handleChange("bag-size", e)} />
+          <TextField label="Number of Bags" variant="outlined" type='number' className='number-of-bags' defaultValue={10} onChange={(e) => this.handleChange("number-of-bags", e)} />
+          <TextField label="Bag Size (lbs)" variant="outlined" type='number' className='bag-size' defaultValue={5} onChange={(e) => this.handleChange("bag-size", e)} />
           <ScaleIcon fontSize="large" style={{
               height: '50px'
             }} />
@@ -206,11 +196,16 @@ class Calculator extends React.Component {
       supplement_weights: 50,
       water_weight: 50,
       batch_info: {
-        number_of_bags: 1,
+        number_of_bags: 10,
         bag_size: 5,
-        batch_size: 5
+        batch_size: 50
       },
-      calculated_weights: Object()
+      calculated_weights: {
+        water_weight: 25,
+        dry_weight: 25,
+        supplement_weight: 12.5,
+        sawdust_weight: 12.5
+      }
     }
     this.calculateBatchInfo = this.calculateBatchInfo.bind(this);
     this.calculateSupplementInfo = this.calculateSupplementInfo.bind(this);
@@ -261,10 +256,10 @@ console.log(calculated_values);
     console.log( 'sawdust weight: ' + sawdust_weight);
     this.setState({calculated_weights: 
       {
-        water_weight: water_weight.toFixed(0),
-        dry_weight: dry_weight.toFixed(0),
-        supplement_weight: supplement_weight.toFixed(0),
-        sawdust_weight: sawdust_weight.toFixed(0)
+        water_weight: water_weight.toFixed(1),
+        dry_weight: dry_weight.toFixed(1),
+        supplement_weight: supplement_weight.toFixed(1),
+        sawdust_weight: sawdust_weight.toFixed(1)
       }
     })
     console.log(this.state);
