@@ -13,6 +13,8 @@ import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import ScaleIcon from '@mui/icons-material/Scale';
 import OpacityIcon from '@mui/icons-material/Opacity';
+import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
+import ForestIcon from '@mui/icons-material/Forest';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -24,7 +26,7 @@ const Input = styled(MuiInput)`
   width: 42px;
 `;
 
-export default function InputSlider({parentCallback}) {
+export default function InputSlider({parentCallback, iconType}) {
   const [value, setValue] = React.useState(50);
 
   const handleSliderChange = (event, newValue) => {
@@ -46,12 +48,9 @@ export default function InputSlider({parentCallback}) {
 
   return (
     <Box sx={{ width: 360 }}>
-      <Typography variant="subtitle2" id="input-slider" gutterBottom>
-      Enter water as a percentage of total batch weight:
-      </Typography>
       <Grid container spacing={2} alignItems="center">
         <Grid item>
-          <OpacityIcon />
+          {iconType}
         </Grid>
         <Grid item xs>
           <Slider
@@ -94,7 +93,10 @@ class Water extends React.Component {
   render() {
     return (
       <div className='water'>
-        <InputSlider parentCallback={this.handleChange}/>
+        <Typography variant="subtitle2" id="input-slider" gutterBottom>
+          Enter water as a percentage of total batch weight:
+        </Typography>
+        <InputSlider parentCallback={this.handleChange} iconType=<OpacityIcon /> />
       </div>
     );
   }
@@ -129,59 +131,22 @@ class Batch extends React.Component {
 }
 
 class Supplement extends React.Component {
-  state = {
-    values: [50]
-  };
-  
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(values) {
-    this.setState(values);
     this.props.calculateSupplementInfo(values);
   }
 
   render() {
     return (
-      <div className="supplement">
-        <TextField variant="outlined" className="supplement" defaultValue={this.props.value} />
-        <Range
-        step={5}
-        min={0}
-        max={100}
-        values={this.state.values}
-        onChange={(values) => this.handleChange({ values })}
-        renderTrack={({ props, children }) => (
-          <div
-            {...props}
-            style={{
-              ...props.style,
-              height: '6px',
-              width: '300px',
-              float: 'right',
-              backgroundColor: '#ccc'
-            }}
-          >
-            {children}
-          </div>
-        )}
-        renderThumb={({ props }) => (
-          <div
-            {...props}
-            style={{
-              ...props.style,
-              height: '42px',
-              width: '8px',
-              backgroundColor: '#999'
-            }}
-          />
-        )}
-      />
-      <output style={{ marginTop: "30px" }} id="output">
-          {this.state.values[0]}%
-        </output>
+      <div className='supplement'>
+        <Typography variant="subtitle2" id="input-slider" gutterBottom>
+          Select supplement (e.g. wheat bran) percentage below:
+        </Typography>
+        <InputSlider parentCallback={this.handleChange} iconType=<LocalPharmacyIcon /> />
       </div>
     );
   }
@@ -227,7 +192,7 @@ class Calculator extends React.Component {
     } else {
       calculated_values = {bag_size: event.target.value, batch_size: event.target.value * this.state.batch_info.number_of_bags, number_of_bags: this.state.batch_info.number_of_bags};
     }
-console.log(calculated_values);
+
     this.setState({batch_info: calculated_values});
     this.calculateState(calculated_values);
   }
@@ -238,8 +203,9 @@ console.log(calculated_values);
  }
 
   calculateSupplementInfo = (newValue) => {
-    this.setState({supplement_weights: newValue.values[0]});
-    this.setState({sawdust_weight: 100 - newValue.values[0]});
+    this.setState({supplement_weights: newValue});
+    this.setState({sawdust_weight: 100 - newValue});
+    this.calculateState();
   }
 
   calculateState = (batch_info = this.state.batch_info ) => {
@@ -270,14 +236,20 @@ console.log(calculated_values);
       <div className="calculator">
         <h1>Mushroom Substrate Calculator</h1>
         <h2>Dry Ingredients</h2>
-        <div className="header">Add supplements (e.g. wheat bran) below:</div>
         <div className="supplements">
           {this.renderSupplement("wheat bran", "25")}
         </div>
         <div>
-        <output className="sawdust-weight">
-            Base substrate (e.g. sawdust): {this.state.sawdust_weight} %
-          </output>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item>
+            <ForestIcon />
+          </Grid>
+          <Grid item>
+            <Typography variant="subtitle2" id="base-substrate" gutterBottom>
+              Base substrate (e.g. sawdust): {this.state.sawdust_weight} %
+            </Typography>
+          </Grid>
+        </Grid>
         </div>
         <h2>Wet Ingredients</h2>
         <div className="water"><Water calculateWaterInfo={this.calculateWaterInfo} /></div>
