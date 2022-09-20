@@ -248,7 +248,9 @@ class Calculator extends React.Component {
   render() {
     return (
       <Container maxWidth={"800"} className="calculator">
-        <Typography align="center" variant="h2">Mushroom Batch Calculator</Typography>
+        <Typography align="center" variant="h1">Mushroom Batch Calculator</Typography>
+
+        <Divider><Typography variant="h2">Inputs</Typography></Divider>
 
         <Grid container spacing={4} justifyContent="center" columns={{ xs: 4, sm: 8, md: 12 }}>
           <Grid item p={2}>
@@ -286,7 +288,7 @@ class Calculator extends React.Component {
         </Grid>
         
 
-        <Divider><Typography variant="h2" component="h2">Results</Typography></Divider>
+        <Divider><Typography variant="h2">Results</Typography></Divider>
         
         <div className='results'>
           <Grid container spacing={2} justifyContent="center" alignItems="center">
