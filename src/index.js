@@ -5,11 +5,13 @@ import './index.css';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import Divider from '@mui/material/Divider';
@@ -30,6 +32,13 @@ const Input = styled(MuiInput)`
 `;
 
 const p1 = {padding: 10, margin: 5, width: 300, height: 150, backgroundColor: '#9933CC' }
+
+const cardStyle = {
+  height: '121px',
+  backgroundColor: 'lightblue',
+  padding: '1em',
+  verticalAlign: 'middle'
+}
 
 export default function InputSlider({parentCallback, iconType}) {
   const [value, setValue] = React.useState(50);
@@ -52,7 +61,7 @@ export default function InputSlider({parentCallback, iconType}) {
   };
 
   return (
-    <Box sx={{ width: 360 }}>
+    <Box sx={{ width: 300 }}>
       <Grid container spacing={2} alignItems="center">
         <Grid item>
           {iconType}
@@ -157,7 +166,7 @@ class Supplement extends React.Component {
   }
 }
 
-class Calculator extends React.Component {
+class Calculator extends React.Component {  
   constructor(props) {
     super(props);
     
@@ -238,39 +247,44 @@ class Calculator extends React.Component {
 
   render() {
     return (
-      <Container maxWidth={640} className="calculator">
-        <Typography variant="h2" component="h2">Mushroom Batch Calculator</Typography>
+      <Container maxWidth={"800"} className="calculator">
+        <Typography align="center" variant="h2">Mushroom Batch Calculator</Typography>
 
-        <Grid container spacing={2} alignItems="top" >
-          <Grid item style={{ backgroundColor: 'lightblue'}} >
-            <h2>Dry Ingredients</h2>
-            <div className="supplements">
-              {this.renderSupplement("wheat bran", "25")}
-            </div>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item>
-                <ForestIcon />
+        <Grid container spacing={4} justifyContent="center" columns={{ xs: 4, sm: 8, md: 12 }}>
+          <Grid item p={2}>
+            <Card style={cardStyle}>
+            <Typography variant="h6">Dry Ingredients</Typography>
+              <div className="supplements">
+                {this.renderSupplement("wheat bran", "25")}
+              </div>
+              <Grid container spacing={2}>
+                <Grid item>
+                  <ForestIcon />
+                </Grid>
+                <Grid item>
+                  <Typography variant="subtitle2" id="base-substrate" gutterBottom>
+                    Base substrate (e.g. sawdust): {this.state.sawdust_weight} %
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Typography variant="subtitle2" id="base-substrate" gutterBottom>
-                  Base substrate (e.g. sawdust): {this.state.sawdust_weight} %
-                </Typography>
-              </Grid>
-            </Grid>
+            </Card>
           </Grid>
-          <Grid item style={{ backgroundColor: 'beige'}} >
-            <h2>Wet Ingredients</h2>
-            <div className="water"><Water calculateWaterInfo={this.calculateWaterInfo} /></div>
+          <Grid item p={2}>
+            <Card style={cardStyle} >
+              <Typography variant="h6">Wet Ingredients</Typography>
+              <div className="water"><Water calculateWaterInfo={this.calculateWaterInfo} /></div>
+            </Card>
           </Grid>
-        </Grid>
-        <Grid container spacing={2} justifyContent="center">
-          <Grid item style={{ backgroundColor: 'green'}} >
-            <h2>Batch info</h2>
+          <Grid item p={2}>
+          <Card style={cardStyle} >
+            <Typography variant="h6">Batch Info</Typography>
             <div className='batch-info'>
               <Batch calculateBatchInfo={this.calculateBatchInfo} />
             </div>
-          </Grid>
+          </Card>
         </Grid>
+        </Grid>
+        
 
         <Divider><Typography variant="h2" component="h2">Results</Typography></Divider>
         

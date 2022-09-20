@@ -59,7 +59,6 @@ ol, ul {
 }
 
 .calculator {
-  max-width: 800px;
   margin: 0 auto;
   background-color: lavender;
   border-radius: 20px;
