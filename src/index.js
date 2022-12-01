@@ -26,6 +26,10 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
+import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material/styles';
+
+let theme = createTheme();
+theme = responsiveFontSizes(theme);
 
 const Input = styled(MuiInput)`
   width: 42px;
@@ -247,6 +251,7 @@ class Calculator extends React.Component {
 
   render() {
     return (
+      <ThemeProvider theme={theme}>
       <Container maxWidth={"800"} className="calculator">
         <Typography align="center" variant="h1">Mushroom Batch Calculator</Typography>
 
@@ -323,6 +328,7 @@ class Calculator extends React.Component {
           </Grid>
         </div>
       </Container>
+      </ThemeProvider>
     );
   }
 }
