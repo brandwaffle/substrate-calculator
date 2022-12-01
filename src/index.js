@@ -39,7 +39,6 @@ const Input = styled(MuiInput)`
 const p1 = {padding: 10, margin: 5, width: 300, height: 150, backgroundColor: '#9933CC' }
 
 const cardStyle = {
-  height: '121px',
   backgroundColor: 'lightblue',
   padding: '1em',
   verticalAlign: 'middle'
@@ -261,7 +260,6 @@ class Calculator extends React.Component {
           <Grid container spacing={4} justifyContent="center" columns={{ xs: 4, sm: 8, md: 12 }}>
             <Grid item p={2}>
               <Card style={cardStyle}>
-                <CardContent>
                   <Typography variant="h6">Dry Ingredients</Typography>
                   <div className="supplements">
                     {this.renderSupplement("wheat bran", "25")}
@@ -276,25 +274,20 @@ class Calculator extends React.Component {
                       </Typography>
                     </Grid>
                   </Grid>
-                </CardContent>
               </Card>
             </Grid>
             <Grid item p={2}>
               <Card style={cardStyle} >
-                <CardContent>
                   <Typography variant="h6">Wet Ingredients</Typography>
                   <div className="water"><Water calculateWaterInfo={this.calculateWaterInfo} /></div>
-                </CardContent>
               </Card>
             </Grid>
             <Grid item p={2}>
               <Card style={cardStyle} >
-                <CardContent>
                   <Typography variant="h6">Batch Info</Typography>
                   <div className='batch-info'>
                     <Batch calculateBatchInfo={this.calculateBatchInfo} />
                   </div>
-                </CardContent>
               </Card>
             </Grid>
           </Grid>
